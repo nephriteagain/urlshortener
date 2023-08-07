@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { db } from "@/firebase/db";
-import { collection, getDoc, doc, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, getDoc, doc, addDoc, query, where, getDocs, updateDoc, increment } from "firebase/firestore";
 import { isValidUrl, generateRandomString } from "@/helper";
 
 interface RequestData {
@@ -17,7 +17,7 @@ export interface DocumentData {
 
 const collectionRef = collection(db, 'url')
 
-export async function POST(request: Request) { 
+export async function POST(request: Request) {     
     const json = await request.json() as RequestData
     const data = json.data
     
@@ -40,19 +40,24 @@ export async function POST(request: Request) {
             createdAt: new Date(Date.now()).toDateString()
         })
         const docRef = doc(db, 'url', newDoc.id)
-        const res = (await getDoc(docRef)).data() as DocumentData        
-        return NextResponse.json(res)
+        const res = (await getDoc(docRef)).data() as DocumentData
+        return NextResponse.json({data: res, type: 'new'})
     }
     // already exist
     let newDoc;
-    querySnapshot.forEach((doc) => {
-        if (doc.exists()) {
+    querySnapshot.forEach(async (docu) => {
+        if (docu.exists()) {
             console.log('already exist')
-            newDoc = doc.data()
+            newDoc = docu.data()
+            const id = docu.id;
+            const docRef = doc(db, 'url', id)
+            await updateDoc(docRef, {
+                clicks: increment(1)
+            })
         }
     })
-    if (newDoc) {
-        return NextResponse.json(newDoc)
+    if (newDoc) {        
+        return NextResponse.json({data: newDoc, type: 'old'})
     }
     return NextResponse.json({message: 'error'})    
 }
