@@ -16,7 +16,7 @@ interface ResultProps {
 
 export default function Result({data, canCopy, setCanCopy}: ResultProps) {
     const copyRef = useRef<HTMLParagraphElement>(null)
-    const origin = window.location.origin
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
 
     async function copyLink(e: MouseEvent) {
         e.stopPropagation()
