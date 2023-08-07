@@ -66,7 +66,7 @@ export default function Home() {
   }
 
   return (
-    <main className='container flex flex-col m-4'>
+    <main className='flex flex-col m-4'>
       <h1 className='text-2xl font-bold mx-auto mb-12'>URL SHORTENER</h1>
       <div className='mx-auto max-w-[500px] mb-10'>
         <form onSubmit={(e) =>handleSubmit(e)}>
