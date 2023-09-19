@@ -36,7 +36,7 @@ export default function Result({data, canCopy, setCanCopy}: ResultProps) {
 
     if (data) {
         return (
-            <div className="w-[90%] max-w-[480px] mx-auto bg-slate-200 px-4 py-2 rounded-lg shadow-lg flex flex-col">
+            <div className="w-[90%] max-w-[480px] mx-auto bg-slate-200 px-4 py-2 rounded-lg shadow-lg flex flex-col truncate">
                 <p className="font-bold mx-auto mb-3">LINK: {data.data.URL}</p>
                 <p className='mx-auto'>
 
